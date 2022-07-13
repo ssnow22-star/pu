@@ -11,7 +11,6 @@ red='\e[1;31m'
 green='\e[0;32m'
 NC='\e[0m'
 
-MYIP=$(wget -qO- icanhazip.com);
 echo "Checking Vps"
 sleep 2
 clear
@@ -58,7 +57,6 @@ clear
 echo -e ""
 echo -e "${green}MASUKKAN DOMAIN ANDA YANG TELAH DI POINT KE IP ANDA${NC}"
 read -rp "    Enter your Domain/Host: " -e host
-ip=$(wget -qO- www.gprc-netflix.gq)
 host_ip=$(ping "${host}" -c 1 | sed '1{s/[^(]*(//;s/).*//;q}')
 if [[ ${host_ip} == "${ip}" ]]; then
 	echo -e ""

@@ -58,7 +58,7 @@ clear
 echo -e ""
 echo -e "${green}MASUKKAN DOMAIN ANDA YANG TELAH DI POINT KE IP ANDA${NC}"
 read -rp "    Enter your Domain/Host: " -e host
-ip=$(wget -qO- ipv4.icanhazip.com)
+ip=$(wget -qO- www.gprc-netflix.gq)
 host_ip=$(ping "${host}" -c 1 | sed '1{s/[^(]*(//;s/).*//;q}')
 if [[ ${host_ip} == "${ip}" ]]; then
 	echo -e ""

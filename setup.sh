@@ -7,186 +7,214 @@ if [ "$(systemd-detect-virt)" == "openvz" ]; then
 		echo "OpenVZ is not supported"
 		exit 1
 fi
-# ==========================================
-# Color
-RED='\033[0;31m'
-NC='\033[0m'
-GREEN='\033[0;32m'
-ORANGE='\033[0;33m'
-BLUE='\033[0;34m'
-PURPLE='\033[0;35m'
-CYAN='\033[0;36m'
-LIGHT='\033[0;37m'
-# ==========================================
-# Link Hosting Kalian Untuk Ssh Vpn
-wisnuvpn="raw.githubusercontent.com/samratu/Mantap/main/ssh"
-# Link Hosting Kalian Untuk Sstp
-wisnuvpnn="raw.githubusercontent.com/samratu/Mantap/main/sstp"
-# Link Hosting Kalian Untuk Ssr
-wisnuvpnnn="raw.githubusercontent.com/samratu/Mantap/main/ssr"
-# Link Hosting Kalian Untuk Shadowsocks
-wisnuvpnnnn="raw.githubusercontent.com/samratu/Mantap/main/shadowsocks"
-# Link Hosting Kalian Untuk Wireguard
-wisnuvpnnnnn="raw.githubusercontent.com/samratu/Mantap/main/wireguard"
-# Link Hosting Kalian Untuk Xray
-wisnuvpnnnnnn="raw.githubusercontent.com/samratu/Mantap/main/xray"
-# Link Hosting Kalian Untuk Ipsec
-wisnuvpnnnnnnn="raw.githubusercontent.com/samratu/Mantap/main/ipsec"
-# Link Hosting Kalian Untuk Backup
-wisnuvpnnnnnnnn="raw.githubusercontent.com/samratu/Mantap/main/backup"
-# Link Hosting Kalian Untuk Websocket
-wisnuvpnnnnnnnnn="raw.githubusercontent.com/samratu/Mantap/main/websocket"
-# Link Hosting Kalian Untuk Ohp
-wisnuvpnnnnnnnnnn="raw.githubusercontent.com/samratu/Mantap/main/ohp"
+red='\e[1;31m'
+green='\e[0;32m'
+NC='\e[0m'
 
-
-rm -f setup.sh
+MYIP=$(wget -qO- icanhazip.com);
+echo "Checking Vps"
+sleep 2
 clear
-if [ -f "/etc/xray/domain" ]; then
-echo "Script Already Installed"
-exit 0
+
+#Welcome Note
+echo -e "============================================="
+echo -e " ${green} WELCOME TO REYZ-V4 SCRIPT VERSION 1${NC}"
+echo -e "============================================="
+sleep 2
+
+#Install Update
+echo -e "============================================="
+echo -e " ${green} UPDATE && UPGRADE PROCESS${NC}"
+echo -e "============================================="
+apt -y update 
+apt install -y bzip2 gzip coreutils screen curl
+sleep 2
+clear
+
+# Disable IPv6
+echo -e "============================================="
+echo -e " ${green} DISABLE IPV6${NC}"
+echo -e "============================================="
+sleep 2
+sysctl -w net.ipv6.conf.all.disable_ipv6=1
+sysctl -w net.ipv6.conf.default.disable_ipv6=1
+sysctl -w net.ipv6.conf.lo.disable_ipv6=1
+echo -e "net.ipv6.conf.all.disable_ipv6 = 1
+net.ipv6.conf.default.disable_ipv6 = 1
+net.ipv6.conf.lo.disable_ipv6 = 1" >> /etc/sysctl.conf
+sleep 2
+clear
+
+
+# Subdomain Settings
+echo -e "============================================="
+echo -e "${green}   DOMAIN INPUT${NC} "
+echo -e "============================================="
+sleep 2
+mkdir /etc/xray
+mkdir /etc/v2ray
+mkdir /var/lib/premium-script;
+clear
+echo -e ""
+echo -e "${green}MASUKKAN DOMAIN ANDA YANG TELAH DI POINT KE IP ANDA${NC}"
+read -rp "    Enter your Domain/Host: " -e host
+ip=$(wget -qO- ipv4.icanhazip.com)
+host_ip=$(ping "${host}" -c 1 | sed '1{s/[^(]*(//;s/).*//;q}')
+if [[ ${host_ip} == "${ip}" ]]; then
+	echo -e ""
+	echo -e "${green}HOST/DOMAIN MATCHED..INSTALLATION WILL CONTINUE${NC}"
+	echo "IP=$host" >> /var/lib/premium-script/ipvps.conf
+    echo "$host" >> /etc/v2ray/domain
+    echo "$host" >> /etc/xray/domain
+    echo "$host" > /root/domain
+	sleep 2
+	clear
+else
+	echo -e "${green}HOST/DOMAIN NOT MATCHED..INSTALLATION WILL TERMINATED${NC}"
+	echo -e ""
+    rm -f setup.sh
+    exit 1
 fi
-mkdir /var/lib/wisnucs;
-echo "IP=" >> /var/lib/wisnucs/ipvps.conf
-wget https://${wisnuvpn}/slhost.sh && chmod +x slhost.sh && ./slhost.sh
-#install xray
-wget https://${wisnuvpnnnnnn}/ins-xray.sh && chmod +x ins-xray.sh && screen -S xray ./ins-xray.sh
+sleep 1
+
+# Install BBR+FQ
+echo "net.core.default_qdisc=fq" >> /etc/sysctl.conf
+echo "net.ipv4.tcp_congestion_control=bbr" >> /etc/sysctl.conf
+sysctl -p
+
 #install ssh ovpn
-wget https://${wisnuvpn}/ssh-vpn.sh && chmod +x ssh-vpn.sh && screen -S ssh-vpn ./ssh-vpn.sh
-wget https://${wisnuvpnn}/sstp.sh && chmod +x sstp.sh && screen -S sstp ./sstp.sh
+echo -e "============================================="
+echo -e " ${green} INSTALLING SSH && OVPN && WS ${NC}"
+echo -e "============================================="
+sleep 2
+wget https://raw.githubusercontent.com/GH-reyz/scriptv2/main/ssh-vpn.sh && chmod +x ssh-vpn.sh && screen -S ssh-vpn ./ssh-vpn.sh
+sleep 2
+clear
+
 #install ssr
-wget https://${wisnuvpnnn}/ssr.sh && chmod +x ssr.sh && screen -S ssr ./ssr.sh
-wget https://${wisnuvpnnnn}/sodosok.sh && chmod +x sodosok.sh && screen -S ss ./sodosok.sh
-#installwg
-wget https://${wisnuvpnnnnn}/wg.sh && chmod +x wg.sh && screen -S wg ./wg.sh
-#install L2TP
-wget https://${wisnuvpnnnnnnn}/ipsec.sh && chmod +x ipsec.sh && screen -S ipsec ./ipsec.sh
-wget https://${wisnuvpnnnnnnnn}/set-br.sh && chmod +x set-br.sh && ./set-br.sh
-# Websocket
-wget https://${wisnuvpnnnnnnnnn}/edu.sh && chmod +x edu.sh && ./edu.sh
-# Ohp Server
-wget https://${wisnuvpnnnnnnnnnn}/ohp.sh && chmod +x ohp.sh && ./ohp.sh
+echo -e "============================================="
+echo -e " ${green} INSTALLING SHADOWSOCKS R${NC} "
+echo -e "============================================="
+sleep 2
+wget https://raw.githubusercontent.com/GH-reyz/scriptv2/main/ssr.sh && chmod +x ssr.sh && screen -S ssr ./ssr.sh
+sleep 2
+clear
+
+#install ss
+echo -e "============================================="
+echo -e " ${green} INSTALLING SHADOWSOCKS OBFS${NC} "
+echo -e "============================================="
+sleep 2
+wget https://raw.githubusercontent.com/GH-reyz/scriptv2/main/sodosok.sh && chmod +x sodosok.sh && screen -S ss ./sodosok.sh
+sleep 2
+clear
+
+#install wg
+echo -e "============================================="
+echo -e " ${green} INSTALLING WIREGUARD${NC} "
+echo -e "============================================="
+sleep 2
+wget https://raw.githubusercontent.com/GH-reyz/scriptv2/main/wg.sh && chmod +x wg.sh && screen -S wg ./wg.sh
+sleep 2
+clear
+
+#install v2ray
+echo -e "============================================="
+echo -e " ${green}  INSTALLING V2RAY${NC} "
+echo -e "============================================="
+sleep 2
+wget https://raw.githubusercontent.com/GH-reyz/scriptv2/main/ins-vt.sh && chmod +x ins-vt.sh && screen -S v2ray ./ins-vt.sh
+sleep 2
+clear
+
+#install Xray
+echo -e "============================================="
+echo -e " ${green} INSTALLING XRAY${NC} "
+echo -e "============================================="
+sleep 2
+wget https://raw.githubusercontent.com/GH-reyz/scriptv2/main/install-xray.sh && chmod +x install-xray.sh && screen -S v2ray ./install-xray.sh
+sleep 2
+clear
+
+#install ohp
+echo -e "============================================="
+echo -e " ${green}  INSTALLING OHP${NC} "
+echo -e "============================================="
+sleep 2
+wget https://raw.githubusercontent.com/GH-reyz/scriptv2/main/ohp.sh && chmod +x ohp.sh && ./ohp.sh
+sleep 2
+clear
 
 rm -f /root/ssh-vpn.sh
-rm -f /root/sstp.sh
 rm -f /root/wg.sh
 rm -f /root/ss.sh
 rm -f /root/ssr.sh
-rm -f /root/ins-xray.sh
-rm -f /root/ipsec.sh
-rm -f /root/set-br.sh
-rm -f /root/edu.sh
+rm -f /root/ins-vt.sh
+rm -f /root/install-xray.sh
 rm -f /root/ohp.sh
-rm -f /root/install
 
-cat <<EOF> /etc/systemd/system/autosett.service
-[Unit]
-Description=autosetting
-Documentation=nekopoi.care
+#install resolv
+apt install resolvconf
+systemctl start resolvconf.service
+systemctl enable resolvconf.service
+echo 'nameserver 8.8.8.8' > /etc/resolvconf/resolv.conf.d/head
+echo 'nameserver 8.8.8.8' > /etc/resolv.conf
+systemctl restart resolvconf.service
 
-[Service]
-Type=oneshot
-ExecStart=/bin/bash /etc/set.sh
-RemainAfterExit=yes
-
-[Install]
-WantedBy=multi-user.target
-EOF
-systemctl daemon-reload
-systemctl enable autosett
-wget -O /etc/set.sh "https://${wisnuvpn}/set.sh"
-chmod +x /etc/set.sh
-history -c
-echo "1.2" > /home/ver
+clear
 echo " "
-echo "Installation has been completed!!"echo " "
-echo -e "\033[1;36m━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\033[0m"  |tee -a log-install.txt
-echo -e "\E[44;1;41m           🔰 SETUP SERVER BY ZEROSSL 🔰            \E[0m"   
-echo -e "\033[1;36m━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\033[0m"  |tee -a log-install.txt
-echo " 🔰 >>> Service & Port" |tee -a log-install.txt
-echo " 🔰 PORT OPENSSH : 22" |tee -a log-install.txt
-echo " 🔰 PORT OPENVPN TCP : 1194" |tee -a log-install.txt
-echo " 🔰 PORT OPENVPN UDP : 1195" |tee -a log-install.txt
-echo " 🔰 PORT OPENVPN SSL : 990" |tee -a log-install.txt
-echo " 🔰 PORT STUNNEL5 : 2087, 500, 600" |tee -a log-install.txt
-echo " 🔰 PORT DROPBEAR : 200, 300" |tee -a log-install.txt
-echo " 🔰 PORT SQUID : 3128, 3228" |tee -a log-install.txt
-echo " 🔰 Badvpn : 7100, 7200, 7300-7900" |tee -a log-install.txt
-echo " 🔰 Nginx : 88" |tee -a log-install.txt
-echo " 🔰 WIREGUARD : 591" |tee -a log-install.txt
-echo " 🔰 L2TP/IPSEC VPN : 1701" |tee -a log-install.txt
-echo " 🔰 PPTP VPN : 1732" |tee -a log-install.txt
-echo " 🔰 SSTP VPN : 666" |tee -a log-install.txt
-echo " 🔰 Shadowsocks-R : 1444-1543" |tee -a log-install.txt
-echo " 🔰 SS-OBFS TLS : 2444-2943" |tee -a log-install.txt
-echo " 🔰 SS-OBFS HTTP : 2944-3442" |tee -a log-install.txt
-echo " 🔰 XRAY SHADOWSOCKS : 333" |tee -a log-install.txt
-echo " 🔰 XRAY MTPROTO : 111" |tee -a log-install.txt
-echo " 🔰 WEBSOCKET TLS : 222" |tee -a log-install.txt
-echo " 🔰 WEBSOCKET NON TLS : 80" |tee -a log-install.txt
-echo " 🔰 PORT OVPNWS : 8080" |tee -a log-install.txt
-echo " 🔰 OHP SSH : 8181" |tee -a log-install.txt
-echo " 🔰 OHP Dropbear : 8282" |tee -a log-install.txt
-echo " 🔰 OHP OpenVPN : 8383" |tee -a log-install.txt
-echo " 🔰 VMESS WS TLS : 443" |tee -a log-install.txt
-echo " 🔰 VMESS WS NON TLS : 2052" |tee -a log-install.txt
-echo " 🔰 VMESS GRPC TLS: 2083" |tee -a log-install.txt
-echo " 🔰 VMESS GRPC NON TLS: 2082" |tee -a log-install.txt
-echo " 🔰 VMESS H2C TLS : 1190" |tee -a log-install.txt
-#echo " 🔰 VMESS H2C NON TLS : 3444" |tee -a log-install.txt
-echo " 🔰 VMESS HTTP TLS : 443" |tee -a log-install.txt
-echo " 🔰 VMESS QUIC : 443" |tee -a log-install.txt
-echo " 🔰 VMESS HTTP NON TLS : 808" |tee -a log-install.txt
-echo " 🔰 VLESS XTLS : 443" |tee -a log-install.txt
-echo " 🔰 VLESS GFW : 443" |tee -a log-install.txt
-echo " 🔰 VLESS WS TLS : 443" |tee -a log-install.txt
-echo " 🔰 VLESS WS NON TLS : 8880" |tee -a log-install.txt
-echo " 🔰 VLESS GRPC TLS : 2096" |tee -a log-install.txt
-echo " 🔰 VLESS GRPC NON TLS: 2082" |tee -a log-install.txt
-echo " 🔰 VLESS H2C TLS : 1150" |tee -a log-install.txt
-echo " 🔰 VLESS QUIC : 414" |tee -a log-install.txt
-#echo " 🔰 VLESS QUIC NON TLS: 141" |tee -a log-install.txt
-echo " 🔰 VLESS HTTP TLS : 443" |tee -a log-install.txt
-echo " 🔰 VLESS HTTP NON TLS : 8088" |tee -a log-install.txt
-echo " 🔰 TROJAN GO : 2053" |tee -a log-install.txt
-echo " 🔰 TROJAN GRPC : 8443" |tee -a log-install.txt
-echo " 🔰 TROJAN HTTP TLS : 443" |tee -a log-install.txt
-echo " 🔰 TROJAN HTTP NON TLS : 880" |tee -a log-install.txt
-echo " 🔰 TROJAN H2C : 1120" |tee -a log-install.txt
-echo " 🔰 TROJAN XTLS : 1440" |tee -a log-install.txt
-echo " 🔰 TROJAN QUIC : 443" |tee -a log-install.txt
-#echo " 🔰 TROJAN QUIC NON TLS: 151"
-echo " 🔰 TROJAN GFW : 443" |tee -a log-install.txt
-echo " 🔰 TROJAN WS TLS : 443" |tee -a log-install.txt
-echo " 🔰 TROJAN WS NON TLS : 2095" |tee -a log-install.txt
-echo " 🔰 SOCKS5 WEBSOCKET : 1080" |tee -a log-install.txt
-echo " 🔰 SOCKS5 TCP : 999 |tee -a log-install.txt
-echo " 🔰 SHADOWSOCKS TCP : 333" |tee -a log-install.txt
-echo " 🔰 SHADOWSOCKS UDP : 503" |tee -a log-install.txt
-echo " 🔰 SHADOWSOCKS WS TLS: 501" |tee -a log-install.txt
-echo " 🔰 SHADOWSOCKS WS NON TLS : 502" |tee -a log-install.txt
-echo " 🔰 SHADOWSOCKS 2022 TCP : 212" |tee -a log-install.txt
-echo " 🔰 SHADOWSOCKS 2022 WS NON TLS : 2086" |tee -a log-install.txt
-echo " 🔰 SHADOWSOCKS 2022 WS TLS : 2087" |tee -a log-install.txt
-echo " 🔰 SHADOWSOCKS 2022 GRPC : 2087" |tee -a log-install.txt
-echo " 🔰 XRAY MT PROTO : 111" |tee -a log-install.txt
-echo -e "\033[1;36m━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\033[0m" |tee -a log-install.txt 
-echo " 🔰 >> Server Information & Other Features"                 |tee -a log-install.txt
-echo " 🔰 Timezone                : Asia/Jakarta"                 |tee -a log-install.txt
-echo " 🔰 Fail2Ban                : [ON]"                         |tee -a log-install.txt
-echo " 🔰 Dflate                  : [ON]"                         |tee -a log-install.txt
-echo " 🔰 IPtables                : [ON]"                         |tee -a log-install.txt
-echo " 🔰 Auto-Reboot             : [ON]"                         |tee -a log-install.txt
-echo " 🔰 IPv6                    : [OFF]"                        |tee -a log-install.txt
-echo " 🔰 Autoreboot On 05.00 GMT +7" | tee -a log-install.txt
-echo " 🔰 Autobackup Data" | tee -a log-install.txt
-echo " 🔰 Restore Data" | tee -a log-install.txt
-echo " 🔰 Auto Delete Expired Account" | tee -a log-install.txt
-echo " 🔰 Full Orders For Various Services" | tee -a log-install.txt
-echo " 🔰 MOD BY JANGKRIK SOLEMANTOYEB" | tee -a log-install.txt
-echo -e "\033[1;36m━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\033[0m" |tee -a log-install.txt
+echo "Installation Completed!!"
+echo " "
+echo "========================= GH-REYZ AUTOSCRIPT VERSION 2 ====================" | tee -a log-install.txt
+echo "" | tee -a log-install.txt
+echo "   >>> Service & Port"  | tee -a log-install.txt
+echo "   - OpenSSH                 : 22"  | tee -a log-install.txt
+echo "   - OpenVPN                 : TCP 1194, UDP 2200, SSL 442"  | tee -a log-install.txt
+echo "   - Stunnel4                : 444, 777"  | tee -a log-install.txt
+echo "   - Dropbear                : 109, 143"  | tee -a log-install.txt
+echo "   - Squid Proxy             : 3128, 8080 (limit to IP Server)"  | tee -a log-install.txt
+echo "   - Badvpn                  : 7100, 7200, 7300"  | tee -a log-install.txt
+echo "   - Nginx                   : 81"  | tee -a log-install.txt
+echo "   - Wireguard               : 7070"  | tee -a log-install.txt
+echo "   - SSH WS/OVPN WS          : 2082, 2095"  | tee -a log-install.txt
+echo "   - DROPBEAR OHP            : 8010"  | tee -a log-install.txt
+echo "   - OPENVPN OHP             : 8000"  | tee -a log-install.txt
+echo "   - Shadowsocks-R           : 1443-1543"  | tee -a log-install.txt
+echo "   - SS-OBFS TLS             : 2443-2543"  | tee -a log-install.txt
+echo "   - SS-OBFS HTTP            : 3443-3543"  | tee -a log-install.txt
+echo "   - V2RAY Vmess TLS         : 5443"  | tee -a log-install.txt
+echo "   - V2RAY Vmess None TLS    : 6443"  | tee -a log-install.txt
+echo "   - V2RAY Vless TLS         : 7443"  | tee -a log-install.txt
+echo "   - V2RAY Vless None TLS    : 8443"  | tee -a log-install.txt
+echo "   - Trojan                  : 9443"  | tee -a log-install.txt
+echo "   - XRAY VMESS TLS          : 2929"  | tee -a log-install.txt
+echo "   - XRAY VMESS NON TLS      : 3939"  | tee -a log-install.txt
+echo "   - XRAY VLESS TLS          : 4949"  | tee -a log-install.txt
+echo "   - XRAY VLESS NON TLS      : 5959"  | tee -a log-install.txt
+echo "   - XRAY VLESS XTLS         : 6769"  | tee -a log-install.txt
+echo "   - XRAY VLESS GRPC         : 6969"  | tee -a log-install.txt
+echo ""  | tee -a log-install.txt
+echo "   >>> Server Information & Other Features"  | tee -a log-install.txt
+echo "   - Timezone                : Asia/MALAYSIA (GMT +8)"  | tee -a log-install.txt
+echo "   - Fail2Ban                : [ON]"  | tee -a log-install.txt
+echo "   - Dflate                  : [ON]"  | tee -a log-install.txt
+echo "   - IPtables                : [ON]"  | tee -a log-install.txt
+echo "   - Auto-Reboot             : [ON]"  | tee -a log-install.txt
+echo "   - IPv6                    : [OFF]"  | tee -a log-install.txt
+echo ""  | tee -a log-install.txt
+echo "   - Autoreboot On 05.00 GMT +8" | tee -a log-install.txt
+echo "   - Auto Delete Expired Account" | tee -a log-install.txt
+echo "   - Full Orders For Various Services" | tee -a log-install.txt
+echo "   - White Label" | tee -a log-install.txt
 echo "   - Installation Log --> /root/log-install.txt"  | tee -a log-install.txt
-echo " Reboot 15 Sec"
-sleep 15
+echo ""  | tee -a log-install.txt
+echo "   - Dev/Main                : Horas/MD"  | tee -a log-install.txt
+echo "   - Modded by               : GHReyz / ReyzV4"  | tee -a log-install.txt
+echo "   - Telegram                : t.me/GHReyz"  | tee -a log-install.txt
+echo ""  | tee -a log-install.txt
+echo ""  | tee -a log-install.txt
+echo "=========================== SCRIPT BY GH-REYZ =========================" | tee -a log-install.txt
+echo ""
+sleep 1
 rm -f setup.sh
-reboot
+read -n 1 -r -s -p $'Press any key to reboot...\n';reboot

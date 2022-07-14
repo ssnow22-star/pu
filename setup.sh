@@ -11,7 +11,7 @@ MYIP=$(wget -qO- icanhazip.com);
 
 echo -e "${green}CHECKING SCRIPT ACCESS${NC}"
 sleep 2
-IZIN=$(curl https://github.com/ssnow22-star/pu/blob/main/registerv2 | grep $MYIP | awk '{print $4}')
+IZIN=$(curl https://raw.githubusercontent.com/ssnow22-star/pu/main/registerv2 | grep $MYIP | awk '{print $4}')
 if [ $MYIP = $IZIN ]; then
     echo -e ""
     echo -e "${green}ACCESS GRANTED...${NC}"
@@ -139,7 +139,7 @@ MYIP=$(wget -qO- icanhazip.com);
 
 echo -e "${green}CHECKING SCRIPT ACCESS${NC}"
 sleep 2
-IZIN=$(curl https://github.com/ssnow22-star/pu/blob/main/registerv2 | grep $MYIP | awk '{print $4}')
+IZIN=$(curl https://raw.githubusercontent.com/ssnow22-star/pu/main/registerv2 | grep $MYIP | awk '{print $4}')
 if [ $MYIP = $IZIN ]; then
     echo -e ""
     echo -e "${green}ACCESS GRANTED...${NC}"

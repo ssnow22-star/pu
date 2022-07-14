@@ -20,8 +20,6 @@ else
 	echo -e ""
     echo -e "${green}ACCESS DENIED...PM TELEGRAM OWNER${NC}"
     sleep 2
-    rm -f setup.sh
-    exit 1
 fi
 clear
 

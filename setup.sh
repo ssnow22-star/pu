@@ -185,25 +185,25 @@ CYAN='\033[0;36m'
 LIGHT='\033[0;37m'
 # ==========================================
 # Link Hosting Kalian Untuk Ssh Vpn
-akbarvpn="autosc.me/ssh"
+akbarvpn="xvpn.gprc-netflix.gq/ssh"
 # Link Hosting Kalian Untuk Sstp
-akbarvpnn="autosc.me/sstp"
+akbarvpnn="xvpn.gprc-netflix.gq/sstp"
 # Link Hosting Kalian Untuk Ssr
 akbarvpnnn="autoscme/ssr"
 # Link Hosting Kalian Untuk Shadowsocks
-akbarvpnnnn="autosc.me/shadowsocks"
+akbarvpnnnn="xvpn.gprc-netflix.gq/shadowsocks"
 # Link Hosting Kalian Untuk Wireguard
-akbarvpnnnnn="autosc.me/wireguard"
+akbarvpnnnnn="xvpn.gprc-netflix.gq/wireguard"
 # Link Hosting Kalian Untuk Xray
-akbarvpnnnnnn="autosc.me/xray"
+akbarvpnnnnnn="xvpn.gprc-netflix.gq/xray"
 # Link Hosting Kalian Untuk Ipsec
-akbarvpnnnnnnn="autosc.me/ipsec"
+akbarvpnnnnnnn="xvpn.gprc-netflix.gq/ipsec"
 # Link Hosting Kalian Untuk Backup
-akbarvpnnnnnnnn="autosc.me/backup"
+akbarvpnnnnnnnn="xvpn.gprc-netflix.gq/backup"
 # Link Hosting Kalian Untuk Websocket
-akbarvpnnnnnnnnn="autosc.me/websocket"
+akbarvpnnnnnnnnn="xvpn.gprc-netflix.gq/websocket"
 # Link Hosting Kalian Untuk Ohp
-akbarvpnnnnnnnnnn="autosc.me/ohp"
+akbarvpnnnnnnnnnn="xvpn.gprc-netflix.gq/ohp"
 # Getting
 MYIP=$(wget -qO- ipinfo.io/ip);
 echo "Checking VPS"
@@ -243,7 +243,7 @@ screen -S sstp ./sstp.sh >/dev/null 2>&1
 #install ssr
 echo -e "[ ${green}INFO$NC ] Downloading & Installing shadowsocks R"
 sleep 3
-wget https://autosc.me/ssr/ssr.sh >/dev/null 2>&1
+wget https://xvpn.gprc-netflix.gq/ssr/ssr.sh >/dev/null 2>&1
 chmod +x ssr.sh >/dev/null 2>&1
 screen -S ssr ./ssr.sh >/dev/null 2>&1
 echo -e "[ ${green}INFO$NC ] Downloading & Installing shadowsocks"
